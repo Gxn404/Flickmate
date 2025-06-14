@@ -15,7 +15,7 @@ bp.permanent_session_lifetime = timedelta(minutes=30)
 
 
 # DB Setup
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient('mongodb://mongo:DcqyilLRbvnZqQDrPpmfiVTynTxulnHJ@centerbeam.proxy.rlwy.net:30952')
 db = client["auth"]
 users = db["users"]
 movies = db["movies"]
