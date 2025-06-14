@@ -1,12 +1,8 @@
-import os
 import pymongo as mongo
 
-def init_db(collection: str):
-    uri = os.getenv("MONGO_PUBLIC_URL")  # ← use Railway's default var
-
-    if not uri:
-        raise Exception("❌ Mongo URI is missing!")
-
-    client = mongo.MongoClient(uri)
+def init_db(collection : str):
+    client = mongo.MongoClient('mongodb://mongo:DcqyilLRbvnZqQDrPpmfiVTynTxulnHJ@centerbeam.proxy.rlwy.net:30952')
     db = client["auth"]
-    return db[collection]
+    col = db[collection]
+
+    return col
