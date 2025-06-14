@@ -1,0 +1,66 @@
+.transfer {
+    background-color: var(--color-primary) !important;
+}
+
+.rounded-circle {
+    background-color: var(--color-primary) !important;
+    color: var(--text-white) !important;
+}
+
+.form-group label {
+    transform: translateY(-10px) !important;
+}
+
+.bi-lock {
+    transform: translateY(10px) !important;
+}
+
+.form-check {
+    padding-bottom: 1rem;
+}
+
+.fa-eye , .fa-eye-slash {
+    position: relative;
+    top: 8px;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 28px;
+    right: 2px;
+    padding: 3px 12px;
+}
+
+.btn-auth {
+    width: 45%;
+}
+
+.btn:nth-child(1) {
+    background-color: transparent !important;
+    color: var(--text-color-secondary) !important;
+    border: 1px solid var(--text-color-secondary) !important;
+}
+
+.btn:nth-child(1):hover {
+    background-color: var(--color-primary) !important;
+    color: var(--text-white) !important;
+    border: none !important;
+}
+
+@media (min-width: 1080px) and (max-width: 1233px)  {
+    .auth-container {
+        width: unset !important;
+    }
+}
+
+@media (max-width: 411px) {
+    .btn:nth-child(1) {
+        width: 100px !important;
+    }
+
+    
+
+    .btn:nth-child(2) {
+        width: 55% !important;
+    }
+}

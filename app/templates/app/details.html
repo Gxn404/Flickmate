@@ -1,0 +1,323 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<style>
+  body {
+    background-color: #0e0e10;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .movie-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-section {
+    margin-top: 0;
+    background: linear-gradient(to right, #0e0e10db 30%, rgba(14, 14, 16, 0.836)),
+    url('https://image.tmdb.org/t/p/w780{{ movie.backdrop_path }}') no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    height: 70vh;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .hero-content {
+    top: 0;
+    height: 100%;
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .poster-wrapper {
+    flex-shrink: 0;
+    transform: translateY(5%);
+  }
+
+  .poster-wrapper img {
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(13, 202, 255, 0.4);
+  }
+
+
+
+  .section-title {
+    color: #0dcaff;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .scrolling-wrapper {
+    overflow-x: auto;
+    scrollbar-color: transparent transparent;
+    white-space: nowrap;
+    padding-bottom: 1rem;
+  }
+
+  .scrolling-wrapper .card {
+    display: inline-block;
+    margin-right: 1rem;
+    min-width: 160px;
+    background: #1a1a1d;
+    border: none;
+    color: white;
+    transition: 0.3s;
+  }
+
+  .scrolling-wrapper .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 10px rgba(13, 202, 255, 0.3);
+  }
+
+  .bi-bookmark-fill {
+    position: relative;
+    top: -23px;
+    left: -13px;
+    font-size: 64px !important;
+    color: hsla(0, 0%, 0%, 0.65) !important;
+    text-shadow: 3px 4px 6px #a0a0a054;
+    cursor: pointer;
+  }
+
+  .bi-bookmark-fill:hover {
+    color: #1c1c1caf !important;
+    cursor: pointer;
+  }
+
+  .bi-plus-lg,
+  .bi-check-lg {
+    position: relative !important;
+    top: -20px !important;
+    left: -60px !important;
+  }
+
+  footer {
+    margin-top: 5rem;
+    padding: 2rem;
+    border-top: 1px solid #222;
+    text-align: center;
+    color: #aaa;
+  }
+
+  .details {
+    flex: 1;
+    padding: 2rem;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    background: rgba(14, 14, 16, 0.6);
+    border-radius: 16px;
+    box-shadow: 0 0 15px rgba(13, 202, 255, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .details h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+
+  .meta div {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .meta i {
+    color: #0dcaff;
+    font-size: 1rem;
+  }
+
+  .genre-tag {
+    background-color: rgba(13, 202, 255, 0.12);
+    color: #0dcaff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    margin-right: 8px;
+    margin-top: 8px;
+    font-weight: 500;
+    text-transform: capitalize;
+    display: inline-block;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 2rem;
+    font-size: 0.92rem;
+    color: #eee;
+    margin-top: 1.5rem;
+  }
+
+  .info-grid strong {
+    color: #0dcaff;
+    font-weight: 600;
+  }
+
+
+  @media (max-width: 768px) {
+    .hero-section {
+      height: auto;
+      flex-direction: column;
+    }
+
+    .hero-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .poster-wrapper {
+      transform: translateY(0);
+    }
+
+    .details {
+      padding-top: 2rem;
+    }
+  }
+</style>
+
+<div class="movie-container">
+  <!-- Hero -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <div class="poster-wrapper">
+        <div class="tag position-absolute z-1 top-0 m-2">
+          <span class="wishlist-btn position-relative" data-id="{{movie._id}}">
+            <b class="bi bi-bookmark-fill text-secondary fs-1">
+              <i class="bi position-absolute start-0 top-50  translate-middle fs-4  bi-plus-lg"></i>
+            </b>
+          </span>
+        </div>
+        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_url }}" alt="{{ movie.title }}">
+      </div>
+      <div class="details">
+        <h1>{{ movie.title }}</h1>
+        <div class="meta">
+          <div><i class="bi bi-star-fill text-warning"></i> {{ movie.rating }}/10</div>
+          <div><i class="bi bi-clock"></i> {{ movie.duration_mins }} mins</div>
+          <div><i class="bi bi-calendar-event"></i> {{ movie.released }}</div>
+          <div><i class="bi bi-translate"></i> {{ movie.languages | map('upper') | join(', ') }}</div>
+          <div><i class="bi bi-film"></i> {{ movie.age_rating }}</div>
+        </div>
+        <div class="mt-3">
+          {% for genre in movie.genres %}
+          <span class="genre-tag">{{ genre }}</span>
+          {% endfor %}
+        </div>
+        <div class="info-grid mt-4">
+          <div><strong>Director:</strong> {{ movie.director }}</div>
+          <div><strong>Writers:</strong> {{ movie.writers | join(', ') }}</div>
+          <div><strong>Country:</strong> {{ movie.country }}</div>
+          <div><strong>Production:</strong> {{ movie.production_companies | join(', ') }}</div>
+        </div>
+        <div class="mt-4 pt-4 d-grid">
+          <div class="mb-3"><strong class="text-info">Streaming on:</strong> {{ movie.streaming | join(', ') }}</div>
+          <a href="{{ movie.trailer_url }}" class="btn btn-info text-dark fw-semibold  g-col-2"><i
+              class="bi bi-play-fill"></i>
+            Watch Trailer</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Overview -->
+<div class="mt-5 px-4">
+  <h4 class="section-title">Overview</h4>
+  <p>{{ movie.description }}</p>
+</div>
+
+<!-- Cast -->
+<div class="mt-5 px-4">
+  <h4 class="section-title">Top Cast</h4>
+  <div class="scrolling-wrapper d-flex mt-3">
+    {% for member in movie.cast %}
+    <div class="card p-3 text-center">
+      <div class="card-body">
+        <h6 class="card-title">{{ member.name }}</h6>
+        <p class="card-text text-muted small">{{ member.role }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Related Movies -->
+<div class="mt-5 px-4" id="related-container" style="display:none;">
+  <h4 class="section-title">Related Movies</h4>
+  <div class="scrolling-wrapper d-flex mt-3" id="related-movies">
+    <!-- Cards will be injected here -->
+  </div>
+</div>
+
+
+</div>
+<script>
+  document.querySelectorAll(".wishlist-btn").forEach(async btn => {
+    const movieId = btn.dataset.id;
+    try {
+      const res = await fetch(`/wishlist/status/${movieId}`);
+      const data = await res.json();
+      const icon = btn.querySelector("i");
+      btn.dataset.wishlisted = data.in_wishlist;
+      btn.title = data.in_wishlist ? "Remove from wishlist" : "Add to wishlist";
+      icon.classList.toggle("bi-check-lg", data.in_wishlist);
+      icon.classList.toggle("bi-plus-lg", !data.in_wishlist);
+      icon.classList.toggle("text-success", data.in_wishlist);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  const movieId = "{{ movie._id }}";
+
+  async function fetchRelatedMovies() {
+    try {
+      const res = await fetch(`/api/movies/recommendations/${movieId}`);
+      const data = await res.json();
+      if (data.related && data.related.length > 0) {
+        const container = document.getElementById("related-movies");
+        const wrapper = document.getElementById("related-container");
+        wrapper.style.display = "block";
+
+        data.related.forEach(movie => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.onclick = () => window.location.href = `/details/${movie._id}`;
+
+          card.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w185${movie.poster_url}" class="card-img-top" alt="${movie.title}">
+            <div class="card-body">
+              <h6 class="card-title">${movie.title}</h6>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      }
+    } catch (err) {
+      console.error("Failed to fetch related movies:", err);
+    }
+  }
+
+  fetchRelatedMovies();
+
+</script>
+{% endblock %}

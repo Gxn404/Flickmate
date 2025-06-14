@@ -1,0 +1,6 @@
+{% if movies_featured %}
+  {% set movies = movies_featured %}
+  {% include 'admin/_movie_table.html' with context %}
+{% else %}
+  <div class="text-white">No featured movies.</div>
+{% endif %}

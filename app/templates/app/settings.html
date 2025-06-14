@@ -1,0 +1,310 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<div class="container py-5 text-light" style="max-width: 960px;">
+  <h2 class="mb-5 text-center" style="color: #0dcaff; font-weight: 700;">Settings ⚙️</h2>
+
+  <!-- Style Presets -->
+  <div class="setting-box">
+    <h4><i class="bi bi-brush me-2" style="color:#0dcaff;"></i>Style Presets</h4>
+    <select class="form-select bg-dark text-light border-0 mt-3" id="stylePreset" aria-label="Theme" style="border-color:#0dcaff; cursor:pointer;">
+      <option value="cyan" selected>Cyan (Default)</option>
+      <option value="purple">Purple Glow</option>
+      <option value="green">Emerald Fresh</option>
+      <option value="orange">Sunset Blaze</option>
+    </select>
+  </div>
+
+  <!-- Theme Settings -->
+  <div class="setting-box">
+    <h4><i class="bi bi-palette me-2" style="color:#0dcaff;"></i>Theme</h4>
+    <div class="form-check form-switch mt-3">
+      <input class="form-check-input" type="checkbox" id="darkMode" checked>
+      <label class="form-check-label" for="darkMode">Dark Mode</label>
+    </div>
+    <div class="form-group mt-3">
+      <label for="accentColor" class="form-label">Accent Color</label>
+      <input type="color" class="form-control form-control-color" id="accentColor" value="#0dcaff" title="Choose your accent color">
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="setting-box">
+    <h4><i class="bi bi-bell me-2" style="color:#0dcaff;"></i>Notifications</h4>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="emailAlerts" checked>
+      <label class="form-check-label" for="emailAlerts">Email alerts</label>
+    </div>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="pushAlerts">
+      <label class="form-check-label" for="pushAlerts">Push notifications</label>
+    </div>
+  </div>
+
+  <!-- Language -->
+  <div class="setting-box">
+    <h4><i class="bi bi-translate me-2" style="color:#0dcaff;"></i>Language</h4>
+    <select class="form-select bg-dark text-light border-0 mt-3" id="languageSelect" style="border-color:#0dcaff;" aria-label="language">
+      <option value="en" selected>English</option>
+      <option value="hi">Hindi</option>
+      <option value="ja">Japanese</option>
+      <option value="ko">Korean</option>
+    </select>
+  </div>
+
+  <!-- Content Filters -->
+  <div class="setting-box">
+    <h4><i class="bi bi-sliders me-2" style="color:#0dcaff;"></i>Content Filters</h4>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="hideNSFW">
+      <label class="form-check-label" for="hideNSFW">Hide NSFW content</label>
+    </div>
+    <div class="form-group mt-3">
+      <label for="preferredGenres" class="form-label">Preferred Genres</label>
+      <select class="form-select bg-dark text-light border-0" id="preferredGenres" multiple style="border-color:#0dcaff; min-height: 120px;">
+        <option selected>Sci-Fi</option>
+        <option>Drama</option>
+        <option>Action</option>
+        <option>Thriller</option>
+        <option>Fantasy</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Privacy -->
+  <div class="setting-box">
+    <h4><i class="bi bi-shield-lock me-2" style="color:#0dcaff;"></i>Privacy</h4>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="profilePublic" checked>
+      <label class="form-check-label" for="profilePublic">Public profile</label>
+    </div>
+    <div class="form-check mt-2">
+      <input class="form-check-input" type="checkbox" id="searchEngineIndexing">
+      <label class="form-check-label" for="searchEngineIndexing">Allow search engines to index my profile</label>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="d-flex justify-content-center gap-3 mt-5 flex-wrap">
+    <button id="saveBtn" class="btn btn-outline-info px-4" style="border-color: #0dcaff; color: #0dcaff; min-width: 140px;">Save Changes</button>
+    <button id="resetBtn" class="btn btn-outline-danger px-4" style="border-color: #ff5c5c; color: #ff5c5c; min-width: 140px;">Reset Settings</button>
+  </div>
+</div>
+
+<!-- STYLES -->
+<style>
+  body {
+    background-color: #0a0a0a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.3s ease;
+  }
+
+  .setting-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.5px solid #0dcaff33;
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 6px 18px rgba(13, 202, 255, 0.1);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .setting-box:hover {
+    box-shadow: 0 12px 36px rgba(13, 202, 255, 0.25);
+    border-color: #0dcaffaa;
+  }
+
+  h4 {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .form-check-input {
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .form-check-input:checked {
+    background-color: #0dcaff !important;
+    border-color: #0dcaff !important;
+  }
+
+  select:focus, input:focus {
+    border-color: #0dcaff !important;
+    box-shadow: 0 0 8px #0dcaff80;
+    outline: none;
+  }
+
+  .btn-outline-info:hover {
+    background-color: #0dcaff;
+    color: #0a0a0a;
+  }
+
+  /* Reset button style */
+  #resetBtn:hover {
+    background-color: #ff5c5c;
+    color: #0a0a0a;
+    border-color: #ff1a1a;
+  }
+
+  /* Style Presets */
+  /* Purple Glow */
+  body.purple {
+    background-color: #120f2c;
+  }
+  body.purple .setting-box {
+    border-color: #9b59b6aa;
+    box-shadow: 0 6px 18px rgba(155, 89, 182, 0.15);
+  }
+  body.purple .setting-box:hover {
+    box-shadow: 0 12px 36px rgba(155, 89, 182, 0.3);
+    border-color: #9b59b6cc;
+  }
+  body.purple .form-check-input:checked {
+    background-color: #9b59b6 !important;
+    border-color: #9b59b6 !important;
+  }
+  body.purple .btn-outline-info:hover {
+    background-color: #9b59b6;
+    color: #0a0a0a;
+  }
+
+  /* Emerald Fresh */
+  body.green {
+    background-color: #0b2e0b;
+  }
+  body.green .setting-box {
+    border-color: #2ecc71aa;
+    box-shadow: 0 6px 18px rgba(46, 204, 113, 0.15);
+  }
+  body.green .setting-box:hover {
+    box-shadow: 0 12px 36px rgba(46, 204, 113, 0.3);
+    border-color: #2ecc71cc;
+  }
+  body.green .form-check-input:checked {
+    background-color: #2ecc71 !important;
+    border-color: #2ecc71 !important;
+  }
+  body.green .btn-outline-info:hover {
+    background-color: #2ecc71;
+    color: #0a0a0a;
+  }
+
+  /* Sunset Blaze */
+  body.orange {
+    background-color: #2c1a0a;
+  }
+  body.orange .setting-box {
+    border-color: #e67e22aa;
+    box-shadow: 0 6px 18px rgba(230, 126, 34, 0.15);
+  }
+  body.orange .setting-box:hover {
+    box-shadow: 0 12px 36px rgba(230, 126, 34, 0.3);
+    border-color: #e67e22cc;
+  }
+  body.orange .form-check-input:checked {
+    background-color: #e67e22 !important;
+    border-color: #e67e22 !important;
+  }
+  body.orange .btn-outline-info:hover {
+    background-color: #e67e22;
+    color: #0a0a0a;
+  }
+</style>
+
+<!-- SCRIPTS -->
+<script>
+  // Save and Reset button refs
+  const saveBtn = document.getElementById('saveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // Elements refs
+  const darkModeCheckbox = document.getElementById('darkMode');
+  const accentColorPicker = document.getElementById('accentColor');
+  const emailAlertsCheckbox = document.getElementById('emailAlerts');
+  const pushAlertsCheckbox = document.getElementById('pushAlerts');
+  const languageSelect = document.getElementById('languageSelect');
+  const hideNSFWCheckbox = document.getElementById('hideNSFW');
+  const preferredGenresSelect = document.getElementById('preferredGenres');
+  const profilePublicCheckbox = document.getElementById('profilePublic');
+  const searchEngineIndexingCheckbox = document.getElementById('searchEngineIndexing');
+  const stylePresetSelect = document.getElementById('stylePreset');
+
+  // Default settings for reset
+  const defaultSettings = {
+    darkMode: true,
+    accentColor: '#0dcaff',
+    emailAlerts: true,
+    pushAlerts: false,
+    language: 'en',
+    hideNSFW: false,
+    preferredGenres: ['Sci-Fi'],
+    profilePublic: true,
+    searchEngineIndexing: false,
+    stylePreset: 'cyan',
+  };
+
+  // Apply style preset (changes body class and accent color)
+  function applyStylePreset(preset) {
+    document.body.classList.remove('purple', 'green', 'orange');
+    if (preset !== 'cyan') {
+      document.body.classList.add(preset);
+    }
+    // Accent color override only if cyan default is not chosen
+    const accentColors = {
+      cyan: '#0dcaff',
+      purple: '#9b59b6',
+      green: '#2ecc71',
+      orange: '#e67e22',
+    };
+    accentColorPicker.value = accentColors[preset] || '#0dcaff';
+  }
+
+  // Reset all settings inputs to default
+  function resetSettings() {
+    darkModeCheckbox.checked = defaultSettings.darkMode;
+    accentColorPicker.value = defaultSettings.accentColor;
+    emailAlertsCheckbox.checked = defaultSettings.emailAlerts;
+    pushAlertsCheckbox.checked = defaultSettings.pushAlerts;
+    languageSelect.value = defaultSettings.language;
+    hideNSFWCheckbox.checked = defaultSettings.hideNSFW;
+    profilePublicCheckbox.checked = defaultSettings.profilePublic;
+    searchEngineIndexingCheckbox.checked = defaultSettings.searchEngineIndexing;
+    stylePresetSelect.value = defaultSettings.stylePreset;
+
+    // Reset preferredGenres multi-select
+    for (let option of preferredGenresSelect.options) {
+      option.selected = defaultSettings.preferredGenres.includes(option.value || option.text);
+    }
+
+    applyStylePreset(defaultSettings.stylePreset);
+  }
+
+  // Init: apply default style preset on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    resetSettings();
+  });
+
+  // Change accent color when picker changes
+  accentColorPicker.addEventListener('input', () => {
+    document.documentElement.style.setProperty('--accent-color', accentColorPicker.value);
+  });
+
+  // Change style preset
+  stylePresetSelect.addEventListener('change', (e) => {
+    applyStylePreset(e.target.value);
+  });
+
+  // Reset button handler
+  resetBtn.addEventListener('click', () => {
+    if (confirm("Are you sure you want to reset all settings to defaults?")) {
+      resetSettings();
+    }
+  });
+
+  // Save button dummy handler (you can replace with real logic)
+  saveBtn.addEventListener('click', () => {
+    alert("Settings saved! 🎉");
+  });
+</script>
+{% endblock %}

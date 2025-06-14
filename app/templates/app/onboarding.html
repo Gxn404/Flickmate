@@ -1,0 +1,249 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<div class="onboarding-wrapper d-flex flex-column align-items-center justify-content-center px-3 py-5" style="min-height: 100vh;">
+  <div class="onboarding-card bg-dark p-4 rounded-4 shadow-lg w-100" style="max-width: 500px; border: 1px solid #0dcaff44;">
+    
+    <!-- Progress Bar -->
+    <div class="progress mb-4" style="height: 6px; border-radius: 3px;">
+      <div class="progress-bar bg-info glow-bar" role="progressbar" style="width: 33%;" id="progressBar"></div>
+    </div>
+
+    <!-- Onboarding Steps -->
+    <form id="onboardingForm" novalidate>
+      
+      <!-- Step 1: Welcome -->
+      <section class="step fade-in" data-step="1">
+        <div class="text-center mb-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/204/204464.png" alt="Welcome" class="mb-3 onboarding-icon pulse-glow" />
+          <h2 class="text-accent">Welcome to CineScope 🎥</h2>
+          <p class="text-muted">Let’s set you up with personalized movie recommendations!</p>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-outline-info px-4" id="nextBtn1">Next</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Preferences -->
+      <section class="step d-none fade-in" data-step="2">
+        <h4 class="text-accent mb-3">Choose Your Preferences</h4>
+
+        <div class="mb-3">
+          <label for="genres" class="form-label">Preferred Genres</label>
+          <select id="genres" class="form-select bg-dark text-light" multiple required>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Drama">Drama</option>
+            <option value="Action">Action</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Romance">Romance</option>
+          </select>
+          <div class="invalid-feedback">Please select at least one genre.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="language" class="form-label">Preferred Language</label>
+          <select id="language" class="form-select bg-dark text-light" required>
+            <option value="" disabled selected>Select language</option>
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Japanese</option>
+            <option>Korean</option>
+            <option>Spanish</option>
+          </select>
+          <div class="invalid-feedback">Please select a language.</div>
+        </div>
+
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="notifications" checked>
+          <label class="form-check-label" for="notifications">Enable Notifications</label>
+        </div>
+
+        <div class="form-check form-switch mb-4">
+          <input class="form-check-input" type="checkbox" id="darkModeToggle" checked>
+          <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary px-4" id="prevBtn2">Back</button>
+          <button type="button" class="btn btn-outline-info px-4" id="nextBtn2">Next</button>
+        </div>
+      </section>
+
+      <!-- Step 3: Confirmation -->
+      <section class="step d-none fade-in" data-step="3">
+        <div class="text-center mb-4">
+          <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" alt="Finish" class="mb-3 onboarding-icon pulse-glow" />
+          <h2 class="text-accent">Almost Done!</h2>
+          <p class="text-muted">Review your preferences and get ready to explore.</p>
+          <ul class="text-start text-muted" id="summaryList"></ul>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="button" class="btn btn-outline-secondary px-4" id="prevBtn3">Back</button>
+          <button type="submit" class="btn btn-info px-4">Finish</button>
+        </div>
+      </section>
+    </form>
+  </div>
+</div>
+
+<!-- STYLES -->
+<style>
+  body {
+    background-color: #0a0a0a;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .text-accent {
+    color: #0dcaff;
+  }
+
+  .text-muted {
+    color: #b0e8ffcc;
+  }
+
+  .onboarding-icon {
+    width: 90px;
+    filter: drop-shadow(0 0 8px #0dcaffaa);
+  }
+
+  .pulse-glow {
+    animation: pulse 2s infinite ease-in-out;
+  }
+
+  @keyframes pulse {
+    0% { filter: drop-shadow(0 0 8px #0dcaffaa); }
+    50% { filter: drop-shadow(0 0 15px #0dcaffcc); }
+    100% { filter: drop-shadow(0 0 8px #0dcaffaa); }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.4s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .glow-bar {
+    box-shadow: 0 0 10px #0dcaff88;
+  }
+
+  .btn-outline-info {
+    border-color: #0dcaff;
+    color: #0dcaff;
+  }
+
+  .btn-outline-info:hover {
+    background-color: #0dcaff;
+    color: #0a0a0a;
+  }
+
+  .btn-outline-secondary {
+    border-color: #555;
+    color: #bbb;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #444;
+    color: #0dcaff;
+  }
+
+  select:focus, input:focus {
+    border-color: #0dcaff !important;
+    box-shadow: 0 0 7px #0dcaff88;
+  }
+
+  .is-invalid {
+    border-color: #ff4d6d !important;
+  }
+</style>
+
+<!-- SCRIPT -->
+<script>
+  const steps = document.querySelectorAll('.step');
+  const progressBar = document.getElementById('progressBar');
+  let currentStep = 0;
+
+  const form = document.getElementById('onboardingForm');
+  const genresSelect = document.getElementById('genres');
+  const languageSelect = document.getElementById('language');
+  const notificationsToggle = document.getElementById('notifications');
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const summaryList = document.getElementById('summaryList');
+
+  function showStep(index) {
+    steps.forEach((step, idx) => {
+      step.classList.toggle('d-none', idx !== index);
+    });
+    progressBar.style.width = ((index + 1) / steps.length) * 100 + '%';
+  }
+
+  function validateStep2() {
+    let valid = true;
+    if ([...genresSelect.selectedOptions].length === 0) {
+      genresSelect.classList.add('is-invalid');
+      valid = false;
+    } else {
+      genresSelect.classList.remove('is-invalid');
+    }
+
+    if (!languageSelect.value) {
+      languageSelect.classList.add('is-invalid');
+      valid = false;
+    } else {
+      languageSelect.classList.remove('is-invalid');
+    }
+
+    return valid;
+  }
+
+  function updateSummary() {
+    const genres = [...genresSelect.selectedOptions].map(opt => opt.value).join(', ');
+    const language = languageSelect.value;
+    const notifications = notificationsToggle.checked ? 'Enabled' : 'Disabled';
+    const theme = darkModeToggle.checked ? 'Dark Mode' : 'Light Mode';
+
+    summaryList.innerHTML = `
+      <li><strong>Genres:</strong> ${genres}</li>
+      <li><strong>Language:</strong> ${language}</li>
+      <li><strong>Notifications:</strong> ${notifications}</li>
+      <li><strong>Theme:</strong> ${theme}</li>
+    `;
+  }
+
+  // Navigation
+  document.getElementById('nextBtn1').addEventListener('click', () => {
+    currentStep = 1;
+    showStep(currentStep);
+  });
+
+  document.getElementById('prevBtn2').addEventListener('click', () => {
+    currentStep = 0;
+    showStep(currentStep);
+  });
+
+  document.getElementById('nextBtn2').addEventListener('click', () => {
+    if (!validateStep2()) return;
+    updateSummary();
+    currentStep = 2;
+    showStep(currentStep);
+  });
+
+  document.getElementById('prevBtn3').addEventListener('click', () => {
+    currentStep = 1;
+    showStep(currentStep);
+  });
+
+  // Final Submit
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('✨ Onboarding Complete! Time to explore CineScope! 🎬');
+    window.location.href = '/dashboard';
+  });
+
+  showStep(currentStep);
+</script>
+{% endblock %}

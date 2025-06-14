@@ -1,0 +1,32 @@
+{% extends 'admin/layout.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ movie.title }}</h2>
+    <p><strong>Description:</strong> {{ movie.description }}</p>
+    <p><strong>Release Year:</strong> {{ movie.release_year }}</p>
+    <p><strong>Duration:</strong> {{ movie.duration_mins }} minutes</p>
+    <p><strong>Genres:</strong> {{ movie.genres | join(', ') }}</p>
+    <p><strong>Languages:</strong> {{ movie.languages | join(', ') }}</p>
+    <p><strong>Director:</strong> {{ movie.director }}</p>
+    <p><strong>Writers:</strong> {{ movie.writers | join(', ') }}</p>
+    <p><strong>Cast:</strong></p>
+    <ul>
+        {% for member in movie.cast %}
+            <li>{{ member.name }} as {{ member.role }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Production Companies:</strong> {{ movie.production_companies | join(', ') }}</p>
+    <p><strong>Country:</strong> {{ movie.country }}</p>
+    <p><strong>Age Rating:</strong> {{ movie.age_rating }}</p>
+    <p><strong>Rating:</strong> {{ movie.rating }}</p>
+    <p><strong>Number of Reviews:</strong> {{ movie.num_reviews }}</p>
+    <p><strong>Streaming Platforms:</strong> {{ movie.streaming | join(', ') }}</p>
+    <p><strong>Featured:</strong> {{ 'Yes' if movie.is_featured else 'No' }}</p>
+    <p><strong>Trending:</strong> {{ 'Yes' if movie.is_trending else 'No' }}</p>
+    <p><strong>Top Rated:</strong> {{ 'Yes' if movie.is_top_rated else 'No' }}</p>
+    <p><strong>Added By:</strong> {{ movie.added_by }}</p>
+    <p><strong>Date Added:</strong> {{ movie.date_added }}</p>
+    <p><strong>Last Updated:</strong> {{ movie.updated_at }}</p>
+</div>
+{% endblock %}

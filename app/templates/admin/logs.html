@@ -1,0 +1,54 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<h1 class="mb-4">System Logs</h1>
+
+<!-- Logs Search -->
+<form class="input-group mb-4 w-100 w-md-50" method="GET" style="max-width: 600px;">
+  <span class="input-group-text bg-dark text-info border-info">
+    <i class="fas fa-search"></i>
+  </span>
+  <input
+    type="text"
+    name="search"
+    class="form-control form-control-lg bg-dark text-info border-info"
+    placeholder="Search logs by user, action, or date..."
+    value="{{ request.args.get('search', '') }}"
+  />
+  <button class="btn btn-info btn-lg" type="submit">Search</button>
+</form>
+
+<!-- Logs Table -->
+<div class="table-responsive">
+<table class="table table-dark table-hover table-striped align-middle">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Action</th>
+      <th>Timestamp</th>
+      <th>IP Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td>{{ log.user or "N/A" }}</td>
+      <td>{{ log.action or "N/A" }}</td>
+      <td>
+        {% if log.timestamp %}
+          {{ log.timestamp.strftime('%Y-%m-%d %I:%M %p') if log.timestamp.__class__.__name__ == 'datetime' else log.timestamp }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+      <td>{{ log.ip_address or "N/A" }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="4" class="text-center text-muted">No logs found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+{% endblock %}

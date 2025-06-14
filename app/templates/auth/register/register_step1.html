@@ -1,0 +1,83 @@
+{% extends 'auth/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+  <h1>Join Flickmate</h1>
+  <p>Discover your next favorite movie</p>
+</div>
+<div class="form">
+  <div class="d-flex flex-column p-4">
+    <div class="pb">Create Account</div>
+    <div class="d-flex align-items-center justify-content-center gap-1 my-1">
+      <div class="d-flex align-items-center page">
+        <div class="rounded-circle d-flex align-items-center justify-content-center text-white cs">
+          1</div>
+        <div class="mx-2 transfer"></div>
+      </div>
+      <div class="d-flex align-items-center page">
+        <div class="rounded-circle d-flex align-items-center justify-content-center rs">
+          2</div>
+      </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+    {% for category, message in messages%}
+    <div class="alert alert-{{category}} border border-2 border-{{category}} rounded-3 mt-3" role="alert">
+      {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+  <form method="POST">
+    <div class="d-flex flex-column p-4 py-0 gap-1 sub">
+      <div class="form-group">
+        <i class="form-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+            stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="bi bi-person" viewBox="0 0 16 16">
+            <!-- Head -->
+            <circle cx="8" cy="5" r="3" />
+            <!-- Shoulders and torso -->
+            <path d="M2 14s1-4 6-4 6 4 6 4" />
+          </svg>
+
+
+        </i>
+        <div class="options gap-3">
+          <div>
+            <label for="fname">First Name</label>
+            <input type="text" class="form-control" name="fname" id="fname" placeholder="First Name"
+              value="{{data.get('fname','')}}" />
+          </div>
+          <div>
+            <label for="lname">Last Name</label>
+            <input type="text" class="form-control" name="lname" id="lname" placeholder="Last Name"
+              value="{{data.get('lname','')}}" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+
+        <i class="mail">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+            stroke-width="1" class="bi bi-envelope" viewBox="0 0 16 16">
+            <path d="M2 3h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+            <path d="M15 4L8 9 1 4" />
+          </svg>
+        </i>
+        <label for="email">Email</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email Address"
+          value="{{ data.get('email','')}}" />
+      </div>
+      <div class="d-grid mb-3">
+        <button type="submit" class="btn btn-auth btn-lg" id="Continue" disabled aria-disabled="true">Continue</button>
+      </div>
+      <div>{{error}}{{submit}}</div>
+    </div>
+  </form>
+  <div class="auth-footer pb-4">
+    <span>Already have an account? </span>
+    <a href="{{rstep1}}">Sign in</a>
+  </div>
+</div>
+{% endblock %}

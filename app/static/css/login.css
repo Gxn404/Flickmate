@@ -1,0 +1,26 @@
+.bi-lock {
+    transform: translateY(50%);
+}
+
+.fa-eye,
+.fa-eye-slash {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-10%);
+    color: #000000a8;
+}
+
+.form-check-label {
+    color: var(--text-color-secondary);
+    line-height: 1.25rem;
+    transform: translateY(0) !important;
+}
+
+.options a{
+    transform: translateY(-2px);
+}
+
+.options a:hover {
+    text-decoration: underline !important;
+}

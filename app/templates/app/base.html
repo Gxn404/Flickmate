@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {% if title %}
+
+  <title>{{title}} | Flick Mate</title>
+  {% else %}
+
+  <title>Welcome to Flick Mate</title>
+  {% endif %}
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="shortcut icon" href="{{url_for('static',filename='assets/flickmate_logo_main.png')}}" type="image/png">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/main.css' )}}">
+</head>
+
+<body class="light-theme">
+  <div class="app-container">
+    <div class="">
+
+      <!--  Navbar  -->
+
+      <nav class="navbar navbar-expand-lg custom-navbar text-white shadow-sm">
+        <div class="container-fluid d-flex align-items-center justify-content-between gap-3 flex-wrap">
+
+          <!-- Left Side: Offcanvas Toggle + Brand -->
+          <div class="d-flex align-items-center gap-3">
+            <!-- Offcanvas Toggle (mobile) -->
+            <button class="menu-toggle d-md-none" type="button" data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasSidebar" aria-label="button" onclick="toggleMenu(this)">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </button>
+
+
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold fs-4" href="#"><svg class="tada text-info" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="m20,3H4c-1.1,0-2,.9-2,2v14c0,1.1.9,2,2,2h16c1.1,0,2-.9,2-2V5c0-1.1-.9-2-2-2Zm-10.46,6l-2.67-4h2.6l2.67,4h-2.6Zm5,0l-2.67-4h2.6l2.67,4h-2.6ZM4,5h.46l2.67,4h-3.13v-4Zm0,14v-8h16v-2h-.46l-2.67-4h3.13v14s-16,0-16,0Z">
+                </path>
+                <path d="M10 18 15 15 10 12 10 18z"></path>
+              </svg> Flick<span class="text-info">mate</span></a>
+          </div>
+
+          <!-- Right Side: Nav Links + Login -->
+          <div class="d-flex align-items-center gap-4 flex-wrap">
+
+            <!-- Nav Links (Desktop only) -->
+            <ul class="navbar-nav d-none d-lg-flex flex-row gap-3 text-uppercase fw-semibold">
+              <li class="nav-item"><a class="nav-link text-white" href="/">Home</a>
+              </li><!-- Movies Dropdown Nav Item -->
+              <li class="nav-item dropdown dropdown-hover">
+                <a class="nav-link text-white dropdown-toggle" href="#" id="moviesDropdown" role="button">
+                  Movies
+                </a>
+                <ul class="dropdown-menu bg-dark border-info shadow" aria-labelledby="moviesDropdown">
+                  <li><a class="dropdown-item text-info" href="#trending"><i class="bi bi-fire me-2"></i>Trending</a>
+                  </li>
+                  <li><a class="dropdown-item text-info" href="#latest"><i class="bi bi-star-fill me-2">Latest</i></a>
+                  </li>
+                  <li><a class="dropdown-item text-info" href="#top-rated"><i class="bi bi-clock-history me-2"></i>Top
+                      Rated</a></li>
+                </ul>
+              </li>
+
+              <li class="nav-item"><a class="nav-link text-white" href="/wishlist"><i
+                    class="bi bi-bookmark me-2"></i>Wishlist</a></li>
+
+            </ul>
+            <div class="flex-grow-1">
+              <!-- Search Toggle Icon (mobile) -->
+              <button class="btn text-info" type="button" id="searchBtn" data-bs-toggle="collapse"
+                data-bs-target="#mobileSearch" aria-label="Search">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+            <!-- Login Button -->
+            {% if not login %}
+            <div class="login">
+              <a href="/login" class="btn btn-outline-info">Login</a>
+            </div>
+            {% else %}
+            <div class="dropdown">
+              <button class="btn btn-outline-info dropdown-toggle" type="button" id="profileDropdown"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                {% if user.avatar_url %}<img src="{{ user.avatar_url }}" class="rounded-circle"
+                  alt="{{ user.username }}" height="30px" width="30px"> {% else %}<i class="bi bi-person-circle"></i>{%
+                endif %}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end bg-dark border-info shadow" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item text-info" href="/profile"><i class="bi bi-person-fill me-2"></i>My
+                    Profile</a></li>
+                <li><a class="dropdown-item text-info" href="/settings"><i class="bi bi-gear-fill me-2"></i>Settings</a>
+                </li>
+                <li><a class="dropdown-item text-info" href="/logout"><i
+                      class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+              </ul>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </nav>
+
+
+
+
+      <!-- Offcanvas Sidebar -->
+      <div class="offcanvas offcanvas-md offcanvas-start bg-black text-white" tabindex="-1" id="offcanvasSidebar">
+        <div class="offcanvas-header border-bottom border-info">
+          <h5 class="offcanvas-title">🎬 Movie Menu</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+          <!-- 🌟 Sidebar Navigation -->
+          <ul class="sidebar-nav">
+            <li><a href="#trending"><i class="fa-solid fa-arrow-trend-up"></i> Trending</a></li>
+            <li><a href="#latest"><i class="bi bi-star-fill"></i> Latest</a></li>
+            <li><a href="#top-rated"><i class="bi bi-clock-history"></i> Top Rated</a></li>
+            <li><a href="/genres"><i class="bi bi-grid-fill"></i> Genres</a></li>
+            <li><a href="/wishlist"><i class="bi bi-bookmark"></i> Wishlist</a></li>
+            <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+          </ul>
+
+        </div>
+      </div>
+
+      <!-- Main Content -->
+
+      <div class="content-wrapper container-fluid px-0 border-1" id="content-Area">
+        {% block content %}
+
+        {% endblock %}
+        <footer class="footer text-center py-4 mt-5">
+          <div class="container">
+            <p class="mb-1 text-light-emphasis small">Made with ❤️ for movie lovers</p>
+            <h5 class="fw-bold text-white mb-2">FlickMate</h5>
+            <p class="text-secondary mb-0">&copy; 2025 FlickMate. All rights reserved.</p>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{url_for('static', filename='js/app.js' )}}"></script>
+</body>
+
+</html>

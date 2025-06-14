@@ -1,0 +1,383 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="main-area px-0">
+    <!-- 🎯 Indicators -->
+    <div id="MainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-touch="true">
+        <!-- 🔘 Indicators -->
+        <div class="carousel-indicators gap-2">
+            <button type="button" data-bs-target="#MainCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+                aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#MainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#MainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+
+        <!-- 🎞 Carousel Items -->
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="3000">
+                <div class="position-relative" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                    <img src="https://image.tmdb.org/t/p/w780/aESb695wTIF0tB7RTGRebnYrjFK.jpg"
+                        class="d-block w-100 h-100 object-fit-cover" alt="Movie 1">
+                    <div class="overlay"></div>
+                    <div class="carousel-caption d-block text-start">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title">Fountain of Youth</div>
+                            <div class="movie-infos">
+                                <div class="movie-info"><i class="fas fa-star text-warning"></i> <span>5.7</span></div>
+                                <div class="movie-info"><i class="fas fa-clock text-info"></i> <span>125 mins</span>
+                                </div>
+                                <div class="movie-info"><span>HD</span></div>
+                                <div class="movie-info"><span>PG-13</span></div>
+                            </div>
+                            <div class="item-content-description">A treasure-hunting mastermind assembles a team for a
+                                life-changing adventure. But to outwit and outrun threats at every turn, he'll need
+                                someone even smarter than he is - his estranged sister.</div>
+                            <div class="item-action mt-3">
+                                <a href="/details/fountain-of-fouth" class="btn btn-info text-white"><i
+                                        class="fa-solid fa-caret-right"></i>
+                                    <span>Watch Options</span></a>
+                                <a href="#" class="btn btn-outline-light mx-3" aria-label="Add to List"><i
+                                        class="fa-solid fa-plus text-white"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item" data-bs-interval="3000">
+                <div class="position-relative" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                    <img src="https://image.tmdb.org/t/p/w780/uIpJPDNFoeX0TVml9smPrs9KUVx.jpg"
+                        class="d-block w-100 h-100 object-fit-cover" alt="Movie 1">
+                    <div class="overlay"></div>
+                    <div class="carousel-caption d-block text-start">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title">Supergirl</div>
+                            <div class="movie-infos">
+                                <div class="movie-info"><i class="fas fa-star text-warning"></i> <span>9.5</span></div>
+                                <div class="movie-info"><i class="fas fa-clock text-info"></i> <span>120 mins</span>
+                                </div>
+                                <div class="movie-info"><span>HD</span></div>
+                                <div class="movie-info"><span>16+</span></div>
+                            </div>
+                            <div class="item-content-description">Lorem ipsum dolor sit amet consectetur adipisicing
+                                elit...
+                            </div>
+                            <div class="item-action mt-3">
+                                <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-caret-right"></i>
+                                    <span>Watch Options</span></a>
+                                <a href="#" class="btn btn-outline-light mx-3" aria-label="Add to List"><i
+                                        class="fa-solid fa-plus text-white"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item" data-bs-interval="3000">
+                <div class="position-relative" style="aspect-ratio: 16 / 9; overflow: hidden;">
+                    <img src="https://image.tmdb.org/t/p/w780/7Zx3wDG5bBtcfk8lcnCWDOLM4Y4.jpg"
+                        class="d-block w-100 h-100 object-fit-cover" alt="Movie 1">
+                    <div class="overlay"></div>
+                    <div class="carousel-caption d-block text-start">
+                        <div class="item-content-wraper">
+                            <div class="item-content-title">Supergirl</div>
+                            <div class="movie-infos">
+                                <div class="movie-info"><i class="fas fa-star text-warning"></i> <span>9.5</span></div>
+                                <div class="movie-info"><i class="fas fa-clock text-info"></i> <span>120 mins</span>
+                                </div>
+                                <div class="movie-info"><span>HD</span></div>
+                                <div class="movie-info"><span>16+</span></div>
+                            </div>
+                            <div class="item-content-description">Lorem ipsum dolor sit amet consectetur adipisicing
+                                elit...
+                            </div>
+                            <div class="item-action mt-3">
+                                <a href="#" class="btn btn-info text-white"><i class="fa-solid fa-caret-right"></i>
+                                    <span>Watch Options</span></a>
+                                <a href="#" class="btn btn-outline-light mx-3" aria-label="Add to List"><i
+                                        class="fa-solid fa-plus text-white"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more .carousel-item here -->
+        </div>
+
+        <!-- ⬅️ Prev -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#MainCarousel" data-bs-slide="prev"
+            aria-label="prev">
+            <span><i class="fa-solid fa-chevron-left fa-xl text-black"></i></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#MainCarousel" data-bs-slide="next"
+            aria-label="next">
+            <span><i class="fa-solid fa-chevron-right fa-xl text-black"></i></span>
+        </button>
+    </div>
+
+
+
+
+    <!-- 🎞️ Updated Scrollable Movie Sections -->
+    <div class="recommended m-3">
+        <!-- 🚀 Trending Now -->
+
+        {% if login %}
+        <section class="movie-carousel mb-5" id="recommendations">
+            <h2 class="fw-semibold mb-3">
+                <i class="fa-solid fa-robot me-2 text-info"></i> Personalized Picks for You
+            </h2>
+            <div class="carousel-wrapper position-relative">
+                <button class="scroll-btn prev btn btn-dark rounded-circle shadow" data-target="recommendations">
+                    <i class="fa-solid fa-chevron-left text-info fs-5"></i>
+                </button>
+                <div id="recommendationsQueue" class="scroll-container d-flex gap-3 overflow-auto px-2 py-2 recommendations">
+                </div>
+                <button class="scroll-btn next btn btn-dark rounded-circle shadow" data-target="recommendationsQueue">
+                    <i class="fa-solid fa-chevron-right text-info fs-5"></i>
+                </button>
+            </div>
+        </section>
+        {% endif %}
+        <section class="movie-carousel mb-5" id="trending">
+            <h2 class="fw-semibold mb-3"><i class="fa-solid fa-arrow-trend-up text-info"></i> Trending Now
+            </h2>
+            <div class="carousel-wrapper position-relative">
+                <button class="scroll-btn prev btn btn-dark rounded-circle shadow" data-target="trendingQueue">
+                    <i class="fa-solid fa-chevron-left text-info fs-5"></i>
+                </button>
+                <div id="trendingQueue" class="scroll-container d-flex gap-3 overflow-auto px-2 py-2 trending"></div>
+                <button class="scroll-btn next btn btn-dark rounded-circle shadow" data-target="trendingQueue">
+                    <i class="fa-solid fa-chevron-right text-info fs-5"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 🌟 Latest -->
+        <section class="movie-carousel mb-5" id="latest">
+            <h2 class="fw-semibold mb-3"><i class="bi bi-stars text-info"></i> Latest</h2>
+            <div class="carousel-wrapper position-relative">
+                <button class="scroll-btn prev btn btn-dark rounded-circle shadow" data-target="latestQueue">
+                    <i class="fa-solid fa-chevron-left text-info fs-5"></i>
+                </button>
+                <div id="latestQueue" class="scroll-container d-flex gap-3 overflow-auto px-2 py-2 latest"></div>
+                <button class="scroll-btn next btn btn-dark rounded-circle shadow" data-target="latestQueue">
+                    <i class="fa-solid fa-chevron-right text-info fs-5"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 🔥 Top Rated -->
+        <section class="movie-carousel mb-5" id="top-rated">
+            <h2 class="fw-semibold mb-3"><i class="bi bi-fire text-info"></i> Top Rated</h2>
+            <div class="carousel-wrapper position-relative">
+                <button class="scroll-btn prev btn btn-dark rounded-circle shadow" data-target="topRatedQueue">
+                    <i class="fa-solid fa-chevron-left text-info fs-5"></i>
+                </button>
+                <div id="topRatedQueue" class="scroll-container d-flex gap-3 overflow-auto px-2 py-2 top_rated"></div>
+                <button class="scroll-btn next btn btn-dark rounded-circle shadow" data-target="topRatedQueue">
+                    <i class="fa-solid fa-chevron-right text-info fs-5"></i>
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- 🚀 Movie Load & Scroll JS -->
+<script>
+    const base_url = "https://image.tmdb.org/t/p/w780/";
+
+    async function fetchMovies(category) {
+        try {
+            const response = await fetch(`/api/movies/${category}`);
+            const data = await response.json();
+            return data.data || [];
+        } catch (error) {
+            console.error("Failed to fetch:", error.message);
+            return [];
+        }
+    }
+
+    function loadMovies(category) {
+        fetchMovies(category).then(movies => {
+            const container = document.querySelector(`.${category}`);
+            if (!container) return;
+            container.innerHTML = '';
+
+
+
+            movies.forEach(movie => {
+                const card = document.createElement("div");
+                card.className = "movie-card position-relative flex-shrink-0";
+                card.style.width = "200px";
+
+                const posterUrl = movie.poster_url?.startsWith('http')
+                    ? movie.poster_url
+                    : `${base_url}${movie.poster_url}`;
+
+                card.innerHTML = `
+                    <div class="tag position-absolute z-1 top-0 end-0 m-2">
+                        <span class="wishlist-btn position-relative" data-id="${movie._id}" data-wishlisted="false" title="Add to wishlist">
+                            <b class="bi bi-bookmark-fill text-secondary fs-1">
+                                <i class="bi position-absolute start-50 top-50 translate-middle fs-4 bi-plus-lg"></i>
+                            </b>
+                        </span>
+                    </div>
+                    <img src="${posterUrl}" class="rounded-4 w-100 object-fit-cover mb-2" alt="${movie.title}" loading="lazy">
+                    <div class="small p-3">
+                        <h5 class="mb-1">${movie.title}</h5>
+                        <div class="d-flex gap-2 flex-wrap mb-1">
+                            <div class="movieInfo"><i class="fas fa-star text-warning"></i> ${movie.rating || 'N/A'}</div>
+                            <div class="movieInfo"><i class="fas fa-clock text-info"></i> ${movie.duration_mins || '—'} mins</div>
+                        </div>
+                        <div><small class="movieInfo">HD | ${movie.age_rating || 'NR'}</small></div>
+                    </div>
+                `;
+
+                // 🌀 Navigate to details
+                card.addEventListener("click", () => {
+                    window.location.href = `/details/${movie._id}`;
+                });
+
+                // 💖 Wishlist button (inside tag)
+                const btn = card.querySelector(".wishlist-btn");
+                btn.addEventListener("click", async (e) => {
+                    e.stopPropagation();
+                    const movieId = btn.dataset.id;
+
+                    try {
+                        const res = await fetch(`/wishlist/toggle/${movieId}`, {
+                            method: 'POST',
+                        });
+                        const result = await res.json();
+
+                        if (result.success) {
+                            const icon = btn.querySelector("i");
+                            const newStatus = result.action === 'added';
+
+                            btn.dataset.wishlisted = newStatus;
+                            btn.title = newStatus ? "Remove from wishlist" : "Add to wishlist";
+
+                            icon.classList.toggle("bi-check-lg", newStatus);
+                            icon.classList.toggle("bi-plus-lg", !newStatus);
+                            icon.classList.toggle("text-success", newStatus);
+                        }
+                    } catch (err) {
+                        console.error("Error toggling wishlist:", err);
+                    }
+                });
+
+                container.appendChild(card);
+            });
+
+            // 🧠 Initial wishlist status fetch
+            updateAllWishlistButtons(container);
+        });
+    }
+
+    // 👈 Drag Scroll & Button Scroll
+    function setupScrollControls() {
+        document.querySelectorAll('.scroll-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                const scrollContainer = document.getElementById(targetId);
+                scrollContainer.scrollBy({
+                    left: btn.classList.contains('next') ? 300 : -300,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        document.querySelectorAll('.scroll-container').forEach(container => {
+            let isDown = false, startX, scrollLeft;
+            container.addEventListener('mousedown', e => {
+                isDown = true;
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = container.scrollLeft;
+            });
+            container.addEventListener('mouseleave', () => isDown = false);
+            container.addEventListener('mouseup', () => isDown = false);
+            container.addEventListener('mousemove', e => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.2;
+                container.scrollLeft = scrollLeft - walk;
+            });
+        });
+    }
+
+    // 🔄 Check Wishlist Status
+    function updateAllWishlistButtons(scope = document) {
+        const buttons = scope.querySelectorAll(".wishlist-btn");
+        buttons.forEach(async btn => {
+            const movieId = btn.dataset.id;
+            try {
+                const res = await fetch(`/wishlist/status/${movieId}`);
+                const data = await res.json();
+                const icon = btn.querySelector("i");
+
+                btn.dataset.wishlisted = data.in_wishlist;
+                btn.title = data.in_wishlist ? "Remove from wishlist" : "Add to wishlist";
+
+                icon.classList.toggle("bi-check-lg", data.in_wishlist);
+                icon.classList.toggle("bi-plus-lg", !data.in_wishlist);
+                icon.classList.toggle("text-success", data.in_wishlist);
+            } catch (err) {
+                console.error("Status fetch error:", err);
+            }
+        });
+    }
+
+    // 📦 Init everything
+    document.addEventListener("DOMContentLoaded", () => {
+        ["recommendations", "trending", "latest", "top_rated"].forEach(loadMovies);
+        setupScrollControls();
+    });
+    // 🔁 Scroll to hash on change
+    window.addEventListener("hashchange", () => {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        }
+    });
+
+    // 📌 Also scroll to hash on initial load (e.g., /#top-rated directly)
+    window.addEventListener("load", () => {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                setTimeout(() => {
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }, 300); // ⏱️ Delay for page rendering
+            }
+        }
+    });
+
+
+
+</script>
+
+
+{% endblock %}

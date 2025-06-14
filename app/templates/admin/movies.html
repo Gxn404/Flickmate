@@ -1,0 +1,89 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+
+<style>
+  .nav-tabs .nav-link {
+    color: #0dcaff;
+    border: none;
+    background-color: transparent;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .nav-tabs .nav-link:hover {
+    color: white !important;
+    background-color: rgba(13, 202, 255, 0.1);
+    border-bottom: 2px solid #0dcaff;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: white !important;
+    border-bottom: 3px solid #0dcaff;
+    background-color: rgba(13, 202, 255, 0.15);
+  }
+</style>
+
+<h1 class="mb-4">Manage Movies</h1>
+
+<!-- Tabs Navigation -->
+<ul class="nav nav-tabs mb-4" id="movieTabs" role="tablist">
+  {% set current_tab = request.args.get('tab', 'all') %}
+  <li class="nav-item" role="presentation">
+    <a class="nav-link {% if current_tab == 'all' %}active{% endif %} text-info" href="?tab=all">All</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link {% if current_tab == 'trending' %}active{% endif %} text-info" href="?tab=trending">Trending</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link {% if current_tab == 'toprated' %}active{% endif %} text-info" href="?tab=toprated">Top Rated</a>
+  </li>
+  <li class="nav-item ms-auto" role="presentation">
+    <a href="/admin/movies/add" class="btn btn-action">
+      <i class="fas fa-plus-circle me-1"></i> Add Movie
+    </a>
+  </li>
+</ul>
+
+<!-- Tab Content -->
+<div class="tab-content">
+
+  {% if current_tab == 'trending' %}
+    <div class="tab-pane fade show active">
+      <form class="input-group mb-4" method="GET" id="searchForm" style="max-width: 600px;">
+        <input type="hidden" name="tab" value="trending">
+        <span class="input-group-text bg-dark text-info border-info"><i class="fas fa-search"></i></span>
+        <input type="text" name="search" class="form-control bg-dark text-info border-info"
+               placeholder="Search trending movies..." value="{{ request.args.get('search', '') }}">
+        <button class="btn btn-info" type="submit">Search</button>
+      </form>
+      {% include 'admin/_movie_table_trending.html' with context %}
+    </div>
+
+  {% elif current_tab == 'toprated' %}
+    <div class="tab-pane fade show active">
+      <form class="input-group mb-4" id="searchForm" method="GET" style="max-width: 600px;">
+        <input type="hidden" name="tab" value="toprated">
+        <span class="input-group-text bg-dark text-info border-info"><i class="fas fa-search"></i></span>
+        <input type="text" name="search" class="form-control bg-dark text-info border-info"
+               placeholder="Search top-rated movies..." value="{{ request.args.get('search', '') }}">
+        <button class="btn btn-info" type="submit">Search</button>
+      </form>
+      {% include 'admin/_movie_table_toprated.html' with context %}
+    </div>
+
+  {% else %}
+    <div class="tab-pane fade show active">
+      <form class="input-group mb-4" method="GET" id="searchForm" style="max-width: 600px;">
+        <input type="hidden" name="tab" value="all">
+        <span class="input-group-text bg-dark text-info border-info"><i class="fas fa-search"></i></span>
+        <input type="text" name="search" class="form-control bg-dark text-info border-info"
+               placeholder="Search all movies..." value="{{ request.args.get('search', '') }}">
+        <button class="btn btn-info" type="submit">Search</button>
+      </form>
+      {% include 'admin/_movie_table.html' with context %}
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
