@@ -1,0 +1,78 @@
+{% extends 'auth/base.html' %}
+
+{% block content %}
+<div class="mb-3">
+  <h1>Join Flickmate</h1>
+  <p>Discover your next favorite movie</p>
+</div>
+<div class="form">
+  <div class="d-flex flex-column p-4">
+    <div class="pb">Create Account</div>
+    <div class="d-flex align-items-center justify-content-center gap-1 my-1">
+      <div class="d-flex align-items-center page">
+        <div class="rounded-circle d-flex align-items-center justify-content-center text-white cs">
+          <p>&#10004</p>
+        </div>
+        <div class="mx-2 transfer"></div>
+      </div>
+      <div class="d-flex align-items-center page">
+        <div class="rounded-circle d-flex align-items-center justify-content-center rs">
+          2</div>
+      </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories = true) %}
+    {% if messages %}
+    {% for category, message in messages%}
+    <div class="alert alert-{{category}} border border-2 border-{{category}} rounded-3 mt-3" role="alert">
+      {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+  <form method="POST">
+    <div class="d-flex flex-column p-4 py-0 sub">
+      <div class="form-group">
+        <i class="form-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
+          </svg>
+        </i>
+        <label for="password">Password</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="Password"
+          autocomplete="new-password" data-target="password"/>
+        <div class="btn toggle-password" data-target="password"><i class="fas fa-eye pass-change"></i></div>
+      </div>
+      <div class="form-group">
+        <i class="form-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4M4.5 7A1.5 1.5 0 0 0 3 8.5v5A1.5 1.5 0 0 0 4.5 15h7a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 11.5 7zM8 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3" />
+          </svg>
+        </i>
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" id="confirm_password"
+          placeholder="Confirm Password" autocomplete="new-password"/>
+        <div class="btn toggle-password" data-target="confirm_password"><i class="fas fa-eye pass-change"
+            aria-label="Toggle password visibility" aria-hidden="true"></i></div>
+      </div>
+      <div class="form-check">
+        <label class="form-check-label" for="rememberMe"><input class="form-check-input" type="checkbox" name="checkbox"
+            id="rememberMe"/>I agree to the <a>Terms of Service</a> and <a>Privacy
+            Policy</a></label>
+      </div>
+      <div class="options">
+        <button type="submit" name="back" value="1" class="btn btn-auth btn-lg bg-primary" id="back">Back</button>
+        <button type="submit" class="btn btn-auth btn-lg" id="Create">Create Account</button>
+      </div>
+    </div>
+  </form>
+  <div class="auth-footer pb-4">
+    <span>Already have an account? </span>
+    <a href="{{rstep2}}">Sign in</a>
+  </div>
+</div>
+{% endblock %}

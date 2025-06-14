@@ -1,0 +1,248 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+<style>
+  html, body {
+    width: 100%;
+    background-color: #0d0d0d;
+    color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .wishlist-heading {
+	text-align: center;
+	font-size: 2.5rem;
+	font-weight: 800;
+	color: #0dcaff;
+	text-shadow: 0 0 5px #0dcaffaa, 0 0 10px #0dcaff55;
+	margin: 2rem auto 1rem;
+	letter-spacing: 1px;
+	animation: pulseText 2s ease-in-out infinite;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.wishlist-heading .emoji {
+  font-size: 2.2rem;
+  animation: floatPop 2s ease-in-out infinite;
+}
+
+@keyframes pulseText {
+  0%, 100% {
+    text-shadow: 0 0 5px #0dcaffaa, 0 0 10px #0dcaff55;
+  }
+  50% {
+    text-shadow: 0 0 12px #0dcaffcc, 0 0 24px #0dcaff77;
+  }
+}
+
+@keyframes floatPop {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.1);
+  }
+}
+
+
+  .wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1.5rem 3rem;
+  }
+
+  .upgraded-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px #00bfff22;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    aspect-ratio: 9/16;
+    cursor: pointer;
+  }
+
+  .upgraded-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px #00bfff44;
+  }
+
+  .poster-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .overlay-info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to top, #000000ee 0%, transparent 110%);
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .info-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+  }
+
+  .info-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+
+  .info-genre {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .genre-badge {
+    background-color: #00bfff22;
+    color: #0dcaff;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    border: 1px solid #0dcaff55;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .genre-badge:hover {
+    background-color: #0dcaff33;
+    transform: scale(1.05);
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #0dcaffcc;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: #121212;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.85;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  .remove-btn:hover {
+    opacity: 1;
+    background: #0dcaff;
+    color: #000;
+  }
+
+  .empty-state {
+    text-align: center;
+    margin-top: 5rem;
+    color: #0dcaffaa;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  @keyframes slideDown {
+    0% { transform: translateY(-30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-top-delay {
+    animation: slideDown 0.8s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.2s; }
+  .delay-2 { animation-delay: 0.4s; }
+  .delay-3 { animation-delay: 0.6s; }
+
+</style>
+
+<h1 class="wishlist-heading">🎬 My Wishlist <span class="emoji">🍿</span></h1>
+
+
+{% if wishlist %}
+<div class="wishlist-grid">
+  {% for movie in wishlist %}
+  <div class="upgraded-card animate-top-delay delay-{{ loop.index % 3 + 1 }}" onclick="location.href='/details/{{ movie._id }}'">
+    <form method="POST" action="{{ url_for('wishlist.toggle_wishlist', movie_id=movie._id) }}">
+      <button class="remove-btn" type="submit" title="Remove {{ movie.title }}">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </form>
+    <div class="poster-wrapper">
+      <img src="{% if movie.poster_url.startswith('http') %}{{ movie.poster_url }}{% else %} https://image.tmdb.org/t/p/w780/{{ movie.poster_url }}{% endif %}" alt="{{ movie.title }} poster" />
+      <div class="overlay-info">
+        <div class="info-title">{{ movie.title }}</div>
+        <div class="info-meta">
+          <span><i class="bi bi-star-fill text-warning"></i> {{ movie.rating or 'N/A' }}</span>
+          <span>{{ movie.year or '' }}</span>
+        </div>
+        {% if movie.genres %}
+        <div class="info-genre">
+          {% for genre in movie.genres %}
+          <span class="genre-badge">{{ genre }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  Your wishlist is empty! Start adding your fav movies 🎬✨
+</div>
+{% endif %}
+<script>
+  async function toggleWishlist(movieId) {
+    try {
+      const res = await fetch(`/wishlist/toggle/${movieId}`, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/json"
+        },
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.action === "removed") {
+        const movieCard = document.getElementById(`movie-${movieId}`);
+        if (movieCard) {
+          movieCard.remove();
+        }
+
+        // Show empty state if none left
+        if (document.querySelectorAll('.movie-card').length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'empty-state';
+          empty.innerHTML = '<i class="bi bi-heartbreak-fill fs-3 d-block mb-3"></i>Your wishlist is empty!<br>Add your favs & start bingeing 🎬✨';
+          document.querySelector('.wishlist-grid').remove();
+          document.querySelector('h1').insertAdjacentElement('afterend', empty);
+        }
+      } else {
+        alert("Something went wrong: " + data.error);
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error contacting server.");
+    }
+  }
+</script>
+{% endblock %}

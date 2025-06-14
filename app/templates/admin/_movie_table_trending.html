@@ -1,0 +1,6 @@
+{% if movies_trending %}
+  {% set movies = movies_trending %}
+  {% include 'admin/_movie_table.html' with context %}
+{% else %}
+  <div class="text-white">No trending movies.</div>
+{% endif %}

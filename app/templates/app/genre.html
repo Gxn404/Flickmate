@@ -1,0 +1,292 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+
+<style>
+.genre-page .genre-card {
+  width: 300px;
+  border-radius: 16px;
+  padding: 1rem;
+  color: #f8f9fa;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #121212;
+  border: 1px solid #222;
+  box-shadow: 0 0 12px #0006;
+  transition: all 0.3s ease;
+  aspect-ratio: 3/4;
+}
+
+.genre-page .genre-card:hover {
+  transform: translateY(-6px) scale(1.03);
+}
+
+/* Icon style */
+.genre-page .genre-card i {
+  font-size: 2.2rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Genre-specific backgrounds */
+.genre-action {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364) !important; /* teal/blue steel */
+  box-shadow: 0 0 8px #00c9ff66;
+}
+
+.genre-sci-fi {
+  background: linear-gradient(135deg, #1f1c2c, #928dab) !important;
+  box-shadow: 0 0 8px #7df9ff66;
+}
+
+.genre-drama {
+  background: linear-gradient(135deg, #2e2e2e, #434343) !important;
+  box-shadow: 0 0 8px #99999966;
+}
+
+.genre-comedy {
+  background: linear-gradient(135deg, #2b5876, #4e4376) !important;
+  box-shadow: 0 0 8px #b5e1ff66;
+}
+
+.genre-animation {
+  background: linear-gradient(135deg, #42275a, #734b6d) !important;
+  box-shadow: 0 0 8px #e0c3fc66;
+}
+
+.genre-romance {
+  background: linear-gradient(135deg, #2b2e4a, #ff0095) !important;
+  box-shadow: 0 0 8px #ffb5e566;
+}
+
+.genre-fantasy {
+  background: linear-gradient(135deg, #16222a, #3a6073) !important;
+  box-shadow: 0 0 8px #74ebd566;
+}
+
+.genre-thriller {
+  background: linear-gradient(135deg, #0f0c29, #302b63) !important;
+  box-shadow: 0 0 8px #9f9fed66;
+}
+
+.genre-page .genre-card {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+
+/* Glow Badge */
+.genre-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.65rem;
+  background: linear-gradient(90deg, #00bfff, #7df9ff);
+  color: #000;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: 0 0 6px #00bfff88;
+}
+
+/* Button Styles */
+.btn-outline-info {
+  border-color: #00bfff;
+  color: #00bfff;
+  transition: all 0.2s ease-in-out;
+  border-radius: 6px;
+}
+
+.btn-outline-info.active,
+.btn-outline-info:hover {
+  background: linear-gradient(90deg, #00bfff22, #7df9ff22);
+  color: #7df9ff;
+  border-color: #7df9ff;
+}
+
+/* Search Bar Style */
+.search-box input {
+    background-color: #1a1a1a;
+    border: none;
+    color: #fff;
+  }
+
+  .search-box input::placeholder {
+    color: #aaa;
+  }
+
+  .search-box button {
+    background-color: #00bfff;
+    color: #fff;
+  }
+
+/* Genre Title */
+.genre-page h6 {
+  font-weight: 600;
+  color: #f8f9fa;
+}
+
+/* Subtitle text (movie count) */
+.genre-page small {
+  color: #aaa;
+}
+
+/* Animations */
+@keyframes slideDown {
+  0% { transform: translateY(-25px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-top-delay {
+  opacity: 0;
+  animation: slideDown 0.7s ease forwards;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+
+</style>
+
+<div class="container py-5 text-light genre-page">
+  <!-- Genre Section Header -->
+<!-- Genre Header -->
+<h2 class="mb-4 fw-bold animate-fade-in d-flex align-items-center gap-2">
+  <i class="bi bi-grid-fill text-info"></i> Explore by Genre
+</h2>
+
+<!-- Search + Sort -->
+<div class="d-flex flex-column flex-md-row gap-3 align-items-stretch mb-4">
+  <!-- Genre Search Input -->
+   <div class="search-box flex-grow-1 d-flex">
+      <input type="text" id="searchInput" class="form-control me-2" placeholder="Search genre..."
+        aria-label="Search query" />
+      <button class="btn btn-outline-info" id="searchBtn" type="button" aria-label="Search">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+
+  <!-- Sort Dropdown -->
+  <div class="input-group sort-select" style="max-width: 250px;">
+    <span class="input-group-text bg-dark border-info text-info">
+      <i class="bi bi-arrow-down-up"></i>
+    </span>
+    <select class="form-select bg-dark text-light border-info" aria-label="Sort by" id="sortSelect">
+      <option selected>Sort by</option>
+      <option value="alpha">A-Z</option>
+      <option value="popularity">Popularity</option>
+      <option value="release">Latest</option>
+      <option value="trending">Trending</option>
+    </select>
+  </div>
+</div>
+
+
+
+  <!-- Genre Cards -->
+<!-- Genre Cards Container -->
+<div class="row g-3 genre-page" id="genreGrid">
+  <!-- Genre cards will be injected dynamically -->
+</div>
+
+
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const genreGrid = document.getElementById("genreGrid");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+
+  const genreList = [
+    { name: "Action", icon: "bi-lightning-charge" },
+    { name: "Sci-Fi", icon: "bi-rocket-takeoff" },
+    { name: "Drama", icon: "bi-people" },
+    { name: "Comedy", icon: "bi-emoji-laughing" },
+    { name: "Animation", icon: "bi-palette" },
+    { name: "Romance", icon: "bi-heart-fill" },
+    { name: "Fantasy", icon: "bi-stars" },
+    { name: "Thriller", icon: "bi-eye" }
+  ];
+
+  let allGenres = [];
+
+  const renderGenreCard = (genre, index, movieCount = 0) => {
+    const slug = genre.name.toLowerCase().replace(/\s+/g, '-');
+    const delay = `delay-${(index % 3) + 1}`;
+    const genreParam = encodeURIComponent(genre.name);
+
+    const col = document.createElement("div");
+    col.className = "col-6 col-md-5 col-lg-4 col-xl-3 genre-item";
+    col.setAttribute("data-name", genre.name.toLowerCase());
+
+    col.innerHTML = `
+      <div class="genre-card genre-${slug} animate-top-delay ${delay} text-center p-3" 
+           data-genre="${genre.name}" style="cursor: pointer;">
+        <i class="bi ${genre.icon} fs-2 text-accent"></i>
+        <h6 class="mt-2 mb-0">${genre.name}</h6>
+        <small>${movieCount} movies</small>
+      </div>
+    `;
+
+    col.querySelector(".genre-card").addEventListener("click", () => {
+      window.location.href = `/search?genre=${genreParam}`;
+    });
+
+    return col;
+  };
+
+  const loadGenres = () => {
+    genreList.forEach((genre, i) => {
+      fetch(`/api/search?genres=${encodeURIComponent(genre.name)}&limit=0`)
+        .then(res => res.json())
+        .then(data => {
+          const movieCount = data?.count ?? 0;
+          const card = renderGenreCard(genre, i, movieCount);
+          allGenres.push(card);
+          genreGrid.appendChild(card);
+        })
+        .catch(err => {
+          console.error(`Error loading genre: ${genre.name}`, err);
+        });
+    });
+  };
+
+  const filterGenres = (query) => {
+    const lowerQuery = query.toLowerCase();
+    genreGrid.innerHTML = ""; // Clear
+    allGenres.forEach(card => {
+      const name = card.getAttribute("data-name");
+      if (name.includes(lowerQuery)) {
+        genreGrid.appendChild(card);
+      }
+    });
+  };
+
+  // Search trigger
+  searchBtn.addEventListener("click", () => {
+    filterGenres(searchInput.value);
+  });
+
+  // Also filter on enter
+  searchInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") filterGenres(searchInput.value);
+    if (searchInput.value === "") filterGenres(""); // Show all
+  });
+
+  loadGenres();
+});
+</script>
+
+
+
+{% endblock %}

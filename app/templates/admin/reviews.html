@@ -1,0 +1,57 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<h1 class="mb-4">Manage Reviews</h1>
+
+<!-- Search Reviews -->
+<form class="input-group mb-4 w-100 w-md-50" method="GET" style="max-width: 600px;">
+  <span class="input-group-text bg-dark text-info border-info">
+    <i class="fas fa-search"></i>
+  </span>
+  <input
+    type="text"
+    name="search"
+    class="form-control form-control-lg bg-dark text-info border-info"
+    placeholder="Search reviews by user or movie title..."
+    value="{{ request.args.get('search', '') }}"
+  />
+  <button class="btn btn-info btn-lg" type="submit">Search</button>
+</form>
+
+<!-- Reviews Table -->
+<table class="table table-dark table-hover table-striped align-middle">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Movie</th>
+      <th>Rating</th>
+      <th>Review</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for review in reviews %}
+    <tr>
+      <td>{{ review.user }}</td>
+      <td>{{ review.movie_title }}</td>
+      <td>{{ review.rating }}/10</td>
+      <td class="text-truncate" style="max-width: 350px;">{{ review.text }}</td>
+      <td>{{ review.date.strftime('%Y-%m-%d') }}</td>
+      <td>
+        <a href="/admin/reviews/view/{{ review._id }}" class="btn btn-sm btn-outline-info" title="View">
+          <i class="fas fa-eye"></i>
+        </a>
+        <a href="/admin/reviews/delete/{{ review._id }}" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Delete this review?');">
+          <i class="fas fa-trash"></i>
+        </a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6" class="text-muted text-center">No reviews found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

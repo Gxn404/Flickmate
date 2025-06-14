@@ -1,0 +1,75 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<style>
+    body, html {
+        height: 100%;
+    }
+
+    .error-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80vh;
+        text-align: center;
+        padding: 2rem;
+        flex-direction: column;
+        color: #fff;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .error-code {
+        font-size: 10rem;
+        font-weight: 900;
+        color: #0dcaff;
+        text-shadow: 0 0 20px rgba(13, 202, 255, 0.5);
+        animation: pulse 1.5s infinite;
+    }
+
+    .error-msg {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-home {
+        background-color: #0dcaff;
+        color: #000;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-home:hover {
+        background-color: #00a2c6;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .error-graphic {
+        width: 220px;
+        margin-bottom: 1.5rem;
+        opacity: 0.8;
+    }
+
+    @keyframes pulse {
+        0%, 100% { text-shadow: 0 0 20px rgba(13, 202, 255, 0.5); }
+        50% { text-shadow: 0 0 35px rgba(13, 202, 255, 0.9); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="error-page">
+    <img src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png" alt="404 Icon" class="error-graphic" />
+    <div class="error-code">404</div>
+    <div class="error-msg">Oops! The page you’re looking for doesn't exist 🎥</div>
+    <a href="{{ url_for('home.home') }}" class="btn btn-home">
+        <i class="bi bi-house-door-fill me-1"></i> Back to Home
+    </a>
+</div>
+{% endblock %}

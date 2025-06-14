@@ -1,0 +1,221 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+
+<style>
+    input,
+    textarea,
+    select {
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #0dcaff !important;
+        box-shadow: 0 0 0 0.1rem rgba(13, 202, 255, 0.25);
+    }
+
+    #json-input {
+        font-family: monospace;
+        height: 300px;
+        width: 100%;
+        background: #121212;
+        color: #0dcaff;
+        border: 1px solid #0dcaff;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        display: none;
+        /* hidden by default */
+        resize: vertical;
+    }
+</style>
+
+<h2 class="mb-4 text-cyan-400">Add New Movie</h2>
+
+<!-- Toggle Buttons -->
+<div class="mb-3">
+    <button type="button" id="show-form-btn" class="btn btn-info me-2">Use Form</button>
+    <button type="button" id="show-json-btn" class="btn btn-outline-info">Use JSON</button>
+</div>
+
+<form method="POST" action="/admin/movies/add" class="bg-dark p-4 rounded shadow text-cyan-400"
+    style="max-width: 1000px;">
+
+    <!-- The whole form wrapper for easy toggle -->
+    <div id="form-fields">
+        <!-- Your existing form fields here (same as your current form) -->
+        <!-- ... -->
+        <!-- I’ll add just a few for example: -->
+  <!-- Basic Info -->
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input type="text" name="title" class="form-control bg-black text-info border-info" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea name="description" rows="4" class="form-control bg-black text-info border-info" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Poster URL</label>
+    <input type="text" name="poster_url" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Backdrop Path</label>
+    <input type="text" name="backdrop_path" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Trailer URL</label>
+    <input type="url" name="trailer_url" class="form-control bg-black text-info border-info">
+  </div>
+
+  <!-- Metadata -->
+  <div class="row mb-3">
+    <div class="col">
+      <label class="form-label">Released</label>
+      <input type="number" name="released" class="form-control bg-black text-info border-info">
+    </div>
+    <div class="col">
+      <label class="form-label">Duration (mins)</label>
+      <input type="number" name="duration_mins" class="form-control bg-black text-info border-info">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Genres (comma separated)</label>
+    <input type="text" name="genres" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Languages (comma separated)</label>
+    <input type="text" name="languages" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Director</label>
+    <input type="text" name="director" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Writers (comma separated)</label>
+    <input type="text" name="writers" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Cast (Format: Name:Role, separate by |)</label>
+    <input type="text" name="cast" placeholder="Leonardo DiCaprio:Cobb | Joseph Gordon-Levitt:Arthur" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Production Companies (comma separated)</label>
+    <input type="text" name="production_companies" class="form-control bg-black text-info border-info">
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <label class="form-label">Country</label>
+      <input type="text" name="country" class="form-control bg-black text-info border-info">
+    </div>
+    <div class="col">
+      <label class="form-label">Age Rating</label>
+      <input type="text" name="age_rating" class="form-control bg-black text-info border-info">
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col">
+      <label class="form-label">Rating</label>
+      <input type="number" step="0.1" name="rating" class="form-control bg-black text-info border-info">
+    </div>
+    <div class="col">
+      <label class="form-label"># Reviews</label>
+      <input type="number" name="num_reviews" class="form-control bg-black text-info border-info">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">streaming (comma separated)</label>
+    <input type="text" name="streaming" class="form-control bg-black text-info border-info">
+  </div>
+        <!-- (all other inputs go here, exactly as you provided) -->
+    </div>
+
+    <!-- JSON textarea -->
+    <textarea id="json-input" name="json_data" placeholder='Paste full movie JSON here'></textarea>
+
+    <!-- Status Flags -->
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" name="is_popular" id="is_popular">
+        <label class="form-check-label" for="is_popular">Popular</label>
+    </div>
+
+    <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" name="is_trending" id="is_trending">
+        <label class="form-check-label" for="is_trending">Trending</label>
+    </div>
+
+    <div class="form-check form-switch mb-4">
+        <input class="form-check-input" type="checkbox" name="is_top_rated" id="is_top_rated">
+        <label class="form-check-label" for="is_top_rated">Top Rated</label>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-between">
+        <a href="/admin/movies" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-info">
+            <i class="fas fa-plus-circle me-1"></i> Add Movie
+        </button>
+    </div>
+</form>
+
+<script>
+    const formFields = document.getElementById('form-fields');
+    const jsonInput = document.getElementById('json-input');
+    const showFormBtn = document.getElementById('show-form-btn');
+    const showJsonBtn = document.getElementById('show-json-btn');
+
+    showFormBtn.onclick = () => {
+  formFields.style.display = 'block';
+  jsonInput.style.display = 'none';
+  setFormEnabled(true); // enable form inputs when shown
+  showFormBtn.classList.add('btn-info');
+  showFormBtn.classList.remove('btn-outline-info');
+  showJsonBtn.classList.add('btn-outline-info');
+  showJsonBtn.classList.remove('btn-info');
+};
+
+showJsonBtn.onclick = () => {
+  formFields.style.display = 'none';
+  jsonInput.style.display = 'block';
+  setFormEnabled(false); // disable form inputs when hidden
+  showJsonBtn.classList.add('btn-info');
+  showJsonBtn.classList.remove('btn-outline-info');
+  showFormBtn.classList.add('btn-outline-info');
+  showFormBtn.classList.remove('btn-info');
+};
+
+
+    function setFormEnabled(enabled) {
+  const inputs = formFields.querySelectorAll('input, textarea, select');
+  inputs.forEach(input => {
+    input.disabled = !enabled;
+    // Also toggle required attribute for more robustness
+    if (enabled) {
+      if (input.hasAttribute('data-original-required')) {
+        input.setAttribute('required', 'required');
+      }
+    } else {
+      if (input.hasAttribute('required')) {
+        input.setAttribute('data-original-required', 'true');
+        input.removeAttribute('required');
+      }
+    }
+  });
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+<table class="table table-dark table-hover table-striped align-middle">
+  <thead>
+    <tr>
+      <th>Poster</th>
+      <th>Title</th>
+      <th>Genre</th>
+      <th>Director</th>
+      <th>Release Year</th>
+      <th>Rating</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for movie in movies_all %}
+    <tr>
+      <td>
+        {% if movie.poster_url %}
+        <img
+          src="{{ movie.poster_url if movie.poster_url.startswith('http') else 'https://image.tmdb.org/t/p/w780' + movie.poster_url }}"
+          alt="{{ movie.title }}" class="m-0" style="width: 50px;">
+
+        {% else %}
+        <span class="text-muted">No Poster</span>
+        {% endif %}
+      </td>
+      <td>{{ movie.title }}</td>
+      <td>{{ movie.genre }}</td>
+      <td>{{ movie.director or 'Unknown' }}</td>
+      <td>{{ movie.release_year or 'N/A' }}</td>
+      <td>{{ movie.rating or 'N/A' }}</td>
+      <td>
+        <a href="/admin/movies/view/{{ movie._id }}" class="btn btn-sm btn-outline-info" title="View"><i
+            class="fas fa-eye"></i></a>
+        <a href="/admin/movies/edit/{{ movie._id }}" class="btn btn-sm btn-outline-warning" title="Edit"><i
+            class="fas fa-edit"></i></a>
+        <a href="/admin/movies/delete/{{ movie._id }}" class="btn btn-sm btn-outline-danger" title="Delete"
+          onclick="return confirm('Delete this movie?');"><i class="fas fa-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if not movies %}
+<div class="text-white">No movies found.</div>
+{% endif %}

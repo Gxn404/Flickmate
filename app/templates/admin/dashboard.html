@@ -1,0 +1,222 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<style>
+  /* Upgrade card style */
+  .card {
+    background: #121212;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(13, 202, 255, 0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 30px rgba(13, 202, 255, 0.35);
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #0dcaff;
+    margin-bottom: 0.5rem;
+  }
+  .stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  /* Buttons */
+  .btn-action {
+    background-color: #0dcaff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.6rem 1.3rem;
+    font-weight: 600;
+    color: #0a1f2e;
+    box-shadow: 0 4px 10px rgba(13, 202, 255, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-action:hover {
+    background-color: #08b3f9;
+    box-shadow: 0 6px 14px rgba(13, 202, 255, 0.55);
+  }
+
+  /* Recent activity and chart container split */
+  .dashboard-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  @media (min-width: 992px) {
+    .dashboard-bottom {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+  .recent-activity-container, .chart-container {
+    background: #121212;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(13, 202, 255, 0.15);
+    flex: 1;
+  }
+
+  /* Table tweaks */
+  .table-dark thead th {
+    color: #0dcaff;
+    border-bottom: 2px solid #0dcaff;
+  }
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #1a1a1a;
+  }
+  .table-hover tbody tr:hover {
+    background-color: #0dcaff33;
+  }
+  .table td, .table th {
+    vertical-align: middle;
+  }
+
+  /* Scroll container for logs */
+  .scrollable-logs {
+    max-height: 320px;
+    overflow-y: auto;
+  }
+</style>
+
+<h1 class="mb-5 text-cyan-500 fw-bold">Admin Dashboard</h1>
+
+<div class="row g-4 mb-5">
+  {% set card_classes = "card p-4 text-center" %}
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">Total Users</div>
+      <div class="stat-number">{{ stats.total_users }}</div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">Active Users</div>
+      <div class="stat-number">{{ stats.active_users }}</div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">New Signups (30d)</div>
+      <div class="stat-number">{{ stats.new_signups_30d }}</div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">Movies in Catalog</div>
+      <div class="stat-number">{{ stats.total_movies }}</div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">Orders Today</div>
+      <div class="stat-number">{{ stats.orders_today }}</div>
+    </div>
+  </div>
+  <div class="col-lg-2 col-md-4 col-sm-6 col-6">
+    <div class="{{ card_classes }}">
+      <div class="card-title">Monthly Revenue</div>
+      <div class="stat-number">${{ "{:,.2f}".format(stats.monthly_revenue) }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-5 d-flex flex-wrap gap-3">
+  {% set btn_classes = "btn btn-action d-flex align-items-center gap-2" %}
+  <a href="/admin/users" class="{{ btn_classes }}">
+    <i class="fas fa-users"></i> Manage Users
+  </a>
+  <a href="/admin/movies" class="{{ btn_classes }}">
+    <i class="fas fa-film"></i> Manage Movies
+  </a>
+  <a href="/admin/reviews" class="{{ btn_classes }}">
+    <i class="fas fa-comments"></i> Manage Reviews
+  </a>
+  <a href="/admin/reports" class="{{ btn_classes }}">
+    <i class="fas fa-chart-line"></i> View Reports
+  </a>
+  <a href="/admin/logs" class="{{ btn_classes }}">
+    <i class="fas fa-file-alt"></i> View Logs
+  </a>
+</div>
+
+<!-- Recent Activity & Chart Side by Side -->
+<div class="dashboard-bottom">
+  <div class="recent-activity-container">
+    <h3 class="mb-3 text-cyan-500 fw-semibold">Recent Activity</h3>
+    <div class="scrollable-logs">
+      <table class="table table-dark table-striped table-hover align-middle text-cyan-400 mb-0">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Date &amp; Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in recent_logs %}
+          <tr>
+            <td>{{ log.user }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.timestamp.strftime('%Y-%m-%d %I:%M %p') if log.timestamp else 'N/A' }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="3" class="text-center text-muted">No recent activity available.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h3 class="text-cyan-500 fw-semibold mb-3">Monthly User Signups</h3>
+    <canvas id="signupChart" style="max-width: 100%; height: 320px;"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('signupChart').getContext('2d');
+  const signupChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ chart.labels|tojson }},
+      datasets: [{
+        label: 'Signups',
+        data: {{ chart.data|tojson }},
+        borderColor: '#0dcaff',
+        backgroundColor: 'rgba(13, 202, 255, 0.2)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#0dcaff' },
+          grid: { color: '#0dcaff33' }
+        },
+        x: {
+          ticks: { color: '#0dcaff' },
+          grid: { color: '#0dcaff33' }
+        }
+      },
+      plugins: {
+        legend: { labels: { color: '#0dcaff' } },
+        tooltip: { enabled: true, mode: 'nearest' }
+      }
+    }
+  });
+</script>
+{% endblock %}

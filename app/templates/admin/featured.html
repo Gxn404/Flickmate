@@ -1,0 +1,49 @@
+{% extends 'admin/layout.html' %}
+{% block content %}
+<h1 class="mb-4">Manage Featured Movies</h1>
+
+<!-- Add Movie to Featured -->
+<form class="input-group mb-4 w-100 w-md-50" method="POST" action="/admin/featured/add" style="max-width: 600px;">
+  <input
+    type="text"
+    name="movie_title"
+    class="form-control form-control-lg bg-dark text-info border-info"
+    placeholder="Enter movie title to feature..."
+    required
+  />
+  <button class="btn btn-info btn-lg" type="submit">
+    <i class="fas fa-plus"></i> Add to Featured
+  </button>
+</form>
+
+<!-- Featured Movies List -->
+<table class="table table-dark table-hover table-striped align-middle">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Movie Title</th>
+      <th>Date Added</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for movie in featured_movies %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ movie.title }}</td>
+      <td>{{ movie.added_on.strftime('%Y-%m-%d') }}</td>
+      <td>
+        <a href="/admin/featured/remove/{{ movie._id }}" class="btn btn-sm btn-outline-danger" title="Remove" onclick="return confirm('Remove this movie from featured?');">
+          <i class="fas fa-trash"></i>
+        </a>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="4" class="text-muted text-center">No featured movies yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

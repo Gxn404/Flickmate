@@ -1,0 +1,311 @@
+{% extends "app/base.html" %}
+{% block content %}
+<style>
+  :root {
+    --bg-dark: #121212;
+    --surface-dark: #1e1e1e;
+    --accent: #0dcaf0;
+    --text-muted: #dedede;
+    --text-main: #fff;
+  }
+
+  body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: "Inter", Inter Fallback;
+  }
+
+  .profile-card {
+    background: var(--surface-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+  }
+
+  .text-muted {
+    color: var(--text-muted) !important;
+  }
+
+  .stats-box {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stats-box:hover {
+    background-color: #222222;
+  }
+
+  .stats-box i {
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .tabs {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    max-width: 720px; 
+    width: 100%; 
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+
+  .nav-pills .nav-link.active {
+    background-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .nav-pills .nav-link {
+    color: #a1a1a1;
+  }
+
+  .tab-content {
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #1a1a1a;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+
+  .tab-pane .border {
+    border: none !important;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .btn-outline-info {
+    padding: 0 10px;
+  }
+
+  .btn-outline-info i:hover {
+    color: white !important;
+  }
+
+   .movie-card {
+    background-color: #1f1f1f;
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+  }
+
+  .movie-card img {
+    object-fit: cover;
+    aspect-ratio: 9 / 16;
+    height: 260px;
+  }
+
+  .rating-badge {
+    font-size: 0.75rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--accent);
+    color: #000000;
+    padding: 4px 8px;
+    border-radius: 10px;
+  }
+
+  .hover-zoom {
+  transition: transform 0.3s ease;
+}
+
+.hover-zoom:hover {
+  transform: scale(1.05);
+}
+
+.rating-badge {
+  font-size: 0.75rem;
+}
+
+.card.movie-card:hover {
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.1);
+}
+
+</style>
+<div class="container py-5">
+
+  <!-- Profile Header -->
+  <div class="profile-card d-flex flex-column flex-md-row align-items-center mb-5">
+    <img src="{{ user.avatar_url }}" alt="User Avatar" class="rounded-circle profile-avatar me-md-4 mb-3 mb-md-0">
+    <div>
+      <h2 class="fw-bold mb-1">Hey, {{ user.username }} 👋</h2>
+      <p class="text-muted mb-2">Cinephile | Coder | Binge Watcher</p>
+      <p class="small text-muted"><i class="bi bi-geo-alt-fill"></i> {{ user.location }} • 
+        <i class="bi bi-calendar3"></i> Joined {{ user.join_date or "N/A" }}</p>
+      <button class="btn btn-outline-info btn-sm" id="editBtn">
+        <i class="bi bi-pencil-square me-1"></i> Edit Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="row g-3 mb-5">
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-film"></i>
+        <h5 class="fw-bold mt-2">247</h5>
+        <p class="text-muted small mb-0">Watched</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-star"></i>
+        <h5 class="fw-bold mt-2">89</h5>
+        <p class="text-muted small mb-0">Reviews</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-bar-chart"></i>
+        <h5 class="fw-bold mt-2">4.2</h5>
+        <p class="text-muted small mb-0">Avg Rating</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-clock-history"></i>
+        <h5 class="fw-bold mt-2">312h</h5>
+        <p class="text-muted small mb-0">Watch Time</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-heart"></i>
+        <h5 class="fw-bold mt-2">Sci-Fi</h5>
+        <p class="text-muted small mb-0">Fav Genre</p>
+      </div>
+    </div>
+    <div class="col-6 col-md-2">
+      <div class="stats-box">
+        <i class="bi bi-award"></i>
+        <h5 class="fw-bold mt-2">12</h5>
+        <p class="text-muted small mb-0">Badges</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-container d-flex mb-4">
+    <div class="tabs px-3 py-2 rounded-3">
+      <ul class="nav nav-pills justify-content-between flex-wrap gap-2" id="profileTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="watchlist-tab" data-bs-toggle="pill" data-bs-target="#watchlist"
+            type="button">Watchlist</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="recent-tab" data-bs-toggle="pill" data-bs-target="#recent"
+            type="button">Recently Watched</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="reviews-tab" data-bs-toggle="pill" data-bs-target="#reviews"
+            type="button">My Reviews</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content p-4 shadow-lg">
+<div class="tab-pane fade show active" id="watchlist" role="tabpanel">
+  <h4><i class="bi bi-bookmark text-info me-2"></i>My Watchlist</h4>
+
+  {% if watchlist and watchlist|length > 0 %}
+  <div class="row g-3 mt-3">
+    {% for movie in watchlist %}
+    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+      <div class="card movie-card border-0 shadow-sm position-relative bg-dark h-100 rounded-3">
+        <div class="overflow-hidden rounded-top position-relative">
+          {% set poster = movie.poster_url %}
+<img src="{{ 'https://image.tmdb.org/t/p/w780/' + poster if poster else '/static/img/placeholder.png' }}" alt="{{ movie.title }}">
+
+          
+          <span class="rating-badge position-absolute top-0 end-0 m-2 bg-dark text-warning px-2 py-1 rounded">
+            <i class="bi bi-star-fill me-1"></i>{{ movie.rating or 'N/A' }}
+          </span>
+        </div>
+        <div class="card-body px-2 pb-2">
+          <h6 class="mb-1 text-white text-truncate" title="{{ movie.title }}">{{ movie.title }}</h6>
+          <small class="text-muted d-block text-truncate">
+            {{ movie.genre or 'Genre' }} | {{ movie.year or 'Year' }}
+          </small>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="mt-4 text-center">
+    <p class="text-muted fst-italic">Your watchlist is empty... time to binge something 👀</p>
+    <a href="{{ url_for('movie.search') }}" class="btn btn-outline-info btn-sm mt-2">
+      <i class="bi bi-search me-1"></i>Browse Movies
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+    <div class="tab-pane fade" id="recent" role="tabpanel">
+      <h4><i class="bi bi-film text-info me-2"></i>Recently Watched</h4>
+      <p class="text-muted fst-italic">Coming soon...</p>
+    </div>
+    <div class="tab-pane fade" id="reviews" role="tabpanel">
+      <h4><i class="bi bi-star text-info me-2"></i>My Reviews</h4>
+      <p class="text-muted fst-italic">Coming soon...</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form method="POST" action="{{ url_for('profile.edit_profile') }}" class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProfileLabel">Edit Profile</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="username" class="form-label">Display Name</label>
+          <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+        </div>
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" class="form-control" id="location" name="location" value="{{ user.location }}">
+        </div>
+        <div class="mb-3">
+          <label for="avatar_url" class="form-label">Avatar URL</label>
+          <input type="url" class="form-control" id="avatar_url" name="avatar_url" value="{{ user.avatar_url }}">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-info">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- JS TO TRIGGER MODAL -->
+<script>
+  document.getElementById("editBtn").addEventListener("click", () => {
+    new bootstrap.Modal(document.getElementById("editProfileModal")).show();
+  });
+</script>
+
+{% endblock %}
