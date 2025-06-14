@@ -1,8 +1,7 @@
 import pymongo as mongo
 
 def init_db(collection : str):
-    uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017/")
-    client = mongo.MongoClient(uri)
+    client = mongo.MongoClient("mongodb://mongo:DcqyilLRbvnZqQDrPpmfiVTynTxulnHJ@centerbeam.proxy.rlwy.net:30952/")
     db = client["auth"]
     col = db[collection]
 
